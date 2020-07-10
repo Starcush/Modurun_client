@@ -5,13 +5,56 @@ import IconIonicons from 'react-native-vector-icons/Ionicons';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { connect } from 'react-redux';
+import styled from 'styled-components/native';
 import styles from './styles';
 import * as utils from '../ScheduleUtils/utils';
 import PrettyProp from '../PrettyProp/PrettyProp';
-import ToggleBox from './toggleBox/index';
 import * as actions from '../../../redux/action/SingleTrackViewer/creator';
 import modurunAPI from '../API';
 import productionAppNavActions from '../../../redux/action/ProductionNav/creator';
+
+const TitleContainer = styled.Text`
+  font-size: 15px;
+`;
+
+const Title = styled.Text`
+  font-weight: bold;
+`;
+
+const FlexHorizontal = styled.View`
+  flex-direction: row;
+  align-items: center;
+  background-color: white;
+`;
+
+const Header = styled(FlexHorizontal)`
+  justify-content: space-between;
+  padding-horizontal: 15px;
+`;
+
+const RoomSize = styled.Text`
+  color: #1E90FF;
+  font-size: 15px;
+  padding: 15px;
+  align-content: flex-end;
+`;
+
+const ScheduleEntryContainer = styled.View`
+  background-color: white;
+  margin-bottom: 3px;
+  padding: 5px;
+`;
+
+const StyledIcon = styled(Icon)`
+  font-size: 20px;
+  margin-left: 10px;
+  background-color: lightgrey;
+  border-radius: 10px;
+  padding: 10px;
+`;
+
+const ShowMoreButton = styled.TouchableOpacity`
+`;
 
 const titleShorter = (title, n) => {
   let shortTitle = '';
@@ -22,7 +65,13 @@ const titleShorter = (title, n) => {
   return title;
 };
 
-const MyScheduleListEntry = ({ data, onLayout, dispatch, userInfo, loadSchedules }) => {
+const MyScheduleListEntry = ({
+  data,
+  onLayout,
+  dispatch,
+  userInfo,
+  loadSchedules
+}) => {
   const {
     destination,
     id,
@@ -77,29 +126,10 @@ const MyScheduleListEntry = ({ data, onLayout, dispatch, userInfo, loadSchedules
     });
   };
 
-  const label = (
-    <Text style={{ fontSize: 15, padding: 10 }}>
-      <Text style={{ fontWeight: 'bold' }}>{titleShorter(title, 15)}</Text>
-      <Text style={{ color: '#1E90FF', fontSize: 15, padding: 15, alignContent: 'flex-end'}}>
-        [
-        <IconIonicons name="md-person" size={20} />
-        {`${participants}`}
-        ]
-      </Text>
-    </Text>
-  );
-
-  const value = (
-    <>
-      <Icon name="comments" color="#03D6A7" size={20} onPress={enterChatRoom} />
-    </>
-  );
-
-  if (deleted) return <></>;
-
-  return (
-    <View style={{ marginBottom: 3, padding: 2 }} onLayout={onLayout}>
-      <ToggleBox label={label} value={value} style={styles.entryContainer} arrowSize={35} arrowColor="#2196f3">
+  const renderDetail = () => {
+    if (!showMoreVisible) return <></>;
+    return (
+      <>
         <View style={styles.descContainer}>
           <View style={{ alignItems: 'center', flexDirection: 'row', flexWrap: 'wrap' }}>
             <PrettyProp name="시작 일시" value={utils.convertDate(scheduleFrom)} color="dodgerblue" />
@@ -115,8 +145,34 @@ const MyScheduleListEntry = ({ data, onLayout, dispatch, userInfo, loadSchedules
             <Text style={{ color: 'white', fontSize: 16 }}>자세히 보기</Text>
           </TouchableOpacity>
         </View>
-      </ToggleBox>
-    </View>
+      </>
+    );
+  };
+
+  if (deleted) return <></>;
+  return (
+    <ScheduleEntryContainer onLayout={onLayout}>
+      <Header>
+        <FlexHorizontal>
+          <TitleContainer>
+            <Title>{titleShorter(title, 15)}</Title>
+            <RoomSize>
+              <Text>[</Text>
+              <IconIonicons name="md-person" size={20} />
+              {`${participants}`}
+              <Text>]</Text>
+            </RoomSize>
+          </TitleContainer>
+        </FlexHorizontal>
+        <FlexHorizontal>
+          <Icon name="comments" color="#03D6A7" size={20} onPress={enterChatRoom} />
+          <ShowMoreButton onPress={toggleShowMore}>
+            <StyledIcon name={showMoreVisible ? 'chevron-up' : 'chevron-down'} />
+          </ShowMoreButton>
+        </FlexHorizontal>
+      </Header>
+      {renderDetail()}
+    </ScheduleEntryContainer>
   );
 };
 
