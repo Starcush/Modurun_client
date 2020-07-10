@@ -15,9 +15,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName="Developer">
           <Stack.Screen options={{ headerShown: false }} name="ProductionApp" component={ProductionApp} />
-          {/* <Stack.Screen name="Developer" component={Developer} /> */}
+          <Stack.Screen name="Developer" component={Developer} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

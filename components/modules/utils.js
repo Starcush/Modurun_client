@@ -76,7 +76,7 @@ const getFilterCondition = () => ({
   },
 });
 
-module.exports = {
+export default {
   customizingDateAndTime,
   meterToKilo,
   getUserLocation,

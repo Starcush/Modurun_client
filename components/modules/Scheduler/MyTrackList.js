@@ -1,16 +1,17 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import {
-  StyleSheet, Text, View, StatusBar,
+  View, StatusBar,
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import TrackListEntry from './MyTrackListEntry';
 
-const MyTrackList = ({ showBookmark, showAdd, route }) => {
+const MyTrackList = ({ route }) => {
   const { setAction, scheduleInfo, tracks } = route.params;
   if (!tracks) return <></>;
   if (!tracks.length) return <></>;
   return (
-    <ScrollView style={{backgroundColor: '#1E90FF'}}>
+    <ScrollView style={{ backgroundColor: '#1E90FF' }}>
       <StatusBar />
       {tracks.map((track) => (
         <TrackListEntry

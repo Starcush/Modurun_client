@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import {
   StyleSheet, Text, View, TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import TrackMaster from '../TrackMaster/TrackMaster';
-import { customizingDateAndTime, meterToKilo, createdScheduleInfo } from '../utils';
+import utils from '../utils';
 
 const styles = StyleSheet.create({
   container: {
@@ -35,7 +36,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#2196f3',
   },
   scheduleInfo: {
-    // elevation: 1,
     borderRadius: 1,
   },
   infoTitle: {
@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
     margin: 5,
     flexDirection: 'row',
     borderBottomWidth: 0.5,
-    // justifyContent: 'space-between',
   },
   mapView: {
     flex: 5.5,
@@ -76,17 +75,17 @@ const styles = StyleSheet.create({
 });
 
 const CreatedScheduleInfo = ({ route }) => {
-  const { schedule, track } = createdScheduleInfo(route.params.completeData);
+  const { schedule, track } = utils.createdScheduleInfo(route.params.completeData);
 
   const timeFromArr = schedule.scheduleFrom.toString().split('T');
   const from = timeFromArr[1].split(':');
   const timeToArr = schedule.scheduleTo.toString().split('T');
   const to = timeToArr[1].split(':');
 
-  const date = customizingDateAndTime(schedule.scheduleFrom, 0);
+  const date = utils.customizingDateAndTime(schedule.scheduleFrom, 0);
   const timeFrom = `${from[0]}시 ${from[1]}분`;
   const timeTo = `${to[0]}시 ${to[1]}분`;
-  const distance = meterToKilo(track.trackLength);
+  const distance = utils.meterToKilo(track.trackLength);
   const navigation = useNavigation();
 
   const goToMainPage = () => {
