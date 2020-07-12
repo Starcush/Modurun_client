@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+/* eslint-disable react/prop-types */
+import React, { useState } from 'react';
 import {
-  Text, View, TextInput, TouchableOpacity, Image, Alert, Keyboard, Dimensions,
+  Text, View, TextInput, TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/EvilIcons';
@@ -9,12 +10,12 @@ import moment from 'moment';
 import { ScheduleValidationModal } from '../Modal';
 import styles from './style';
 import TrackMaster from '../TrackMaster/TrackMaster';
-import { customizingDateAndTime, getScheduleData } from '../utils';
+import utils from '../utils';
 import DateTimePickerCompoment from '../DateTimePicker';
 import { getUserTracks } from '../API/tracks';
 import { postSchedule } from '../API/schedule';
 
-const Scheduler = ({dispatch}) => {
+const Scheduler = () => {
   const navigation = useNavigation();
   const [title, setTitle] = useState('');
   const [date, setDate] = useState(new Date());
@@ -69,21 +70,20 @@ const Scheduler = ({dispatch}) => {
       setModal(true);
       return;
     }
-    const postData = getScheduleData(createdScheduleInfo);
+    const postData = utils.getScheduleData(createdScheduleInfo);
     const scheduleFrom = moment(postData.from).format('YYYY-MM-DD HH:mm:ss');
     const scheduleTo = moment(postData.to).format('YYYY-MM-DD HH:mm:ss');
     postData.from = scheduleFrom;
     postData.to = scheduleTo;
     try {
       const completeData = await postSchedule(postData);
-      // console.log('완성 된 일정 ', completeData);
       if (completeData) {
         navigation.navigate('CreatedScheduleInfoScreen', {
           completeData,
         });
       }
     } catch (e) {
-      console.log('Scheduler ', e);
+      console.error('Scheduler ', e);
     }
   };
 
@@ -181,8 +181,8 @@ const Scheduler = ({dispatch}) => {
           <View style={{ paddingHorizontal: 10, marginBottom: 10 }}>
             <View style={styles.pickerView}>
               <Text style={styles.pickerTitle}>시작 일시</Text>
-              <PickerComponent value={customizingDateAndTime(date, 0)} mode="date" setAction={setDatePickerShow} />
-              <PickerComponent value={customizingDateAndTime(0, startTime)} mode="time" setAction={setTimePickerShow} />
+              <PickerComponent value={utils.customizingDateAndTime(date, 0)} mode="date" setAction={setDatePickerShow} />
+              <PickerComponent value={utils.customizingDateAndTime(0, startTime)} mode="time" setAction={setTimePickerShow} />
             </View>
             <View style={styles.pickerView}>
               <Text style={styles.pickerTitle}>소요 시간</Text>

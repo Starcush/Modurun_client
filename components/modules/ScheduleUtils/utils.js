@@ -49,7 +49,6 @@ export const convertDate = (parsedDate, type = 'short') => {
   const minute = dateObj.getMinutes();
   const compactMinute = minute < 10 ? `0${minute}` : minute;
   const longMin = `${dateObj.getMinutes()}분`;
-  // return `${year} ${month} ${date} ${day} ${hour} ${minute}`;
   if (type === 'compact') return `${dateObj.getFullYear() === new Date(Date.now()).getFullYear() ? '' : `${dateObj.getFullYear()}.`}${dateObj.getMonth()}.${dateObj.getDate()}(${day[0]}) ${dateObj.getHours()}:${compactMinute}`;
   if (type === 'short') return `${month} ${date}(${day[0]}) ${dateObj.getHours()}:${compactMinute}`;
   return `${month} ${date} ${day} ${hour} ${longMin}`;

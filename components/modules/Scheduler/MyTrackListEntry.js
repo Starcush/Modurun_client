@@ -1,12 +1,12 @@
-import React, { useState, useRef } from 'react';
+/* eslint-disable react/prop-types */
+import React from 'react';
 import {
   StyleSheet, View, Text,
 } from 'react-native';
-import { TouchableOpacity,TouchableHighlight } from 'react-native-gesture-handler';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
-// import styles from './styles';
 import * as actions from '../../../redux/action/SingleTrackViewer/creator';
 
 const styles = StyleSheet.create({
@@ -130,7 +130,7 @@ const MyTrackListEntry = ({
   data, setSingleTrack, setAction,
 }) => {
   const {
-    trackLength, trackTitle, origin, destination, bookmarked,
+    trackTitle, origin, destination,
   } = data;
   if (!origin || !destination) return <></>;
 
@@ -150,12 +150,11 @@ const MyTrackListEntry = ({
     <View style={styles.entryContainer}>
       <Text style={styles.title}>{trackTitle}</Text>
       <View style={styles.titleButtonContainer}>
-        <TouchableHighlight underlayColor="#03D6A7" onPress={selectTrack} style={styles.chevron }>
-          {/* <Text style={{color: 'white', fontWeight: 'bold'}}>체크</Text> */}
-          <Icon name="check" color="white" style={{padding: 3}} size={15} />
+        <TouchableHighlight underlayColor="#03D6A7" onPress={selectTrack} style={styles.chevron}>
+          <Icon name="check" color="white" style={{ padding: 3 }} size={15} />
         </TouchableHighlight>
-        <TouchableHighlight underlayColor="lightgrey" onPress={viewTrackOnMap} style={{margin: 10}}>
-          <Text style={{fontSize: 12, color: '#1E90FF', fontWeight: 'bold'}}>자세히 보기</Text>
+        <TouchableHighlight underlayColor="lightgrey" onPress={viewTrackOnMap} style={{ margin: 10 }}>
+          <Text style={{ fontSize: 12, color: '#1E90FF', fontWeight: 'bold' }}>자세히 보기</Text>
         </TouchableHighlight>
       </View>
     </View>
