@@ -10,7 +10,14 @@ import utils from './utils';
 
 const { paleColor } = utils;
 
-const TrackViewer = ({ curPosCamera, onRegionChange, onTrackSelected, tracks, initialCamera, scrollEnabled }) => {
+const TrackViewer = ({
+  curPosCamera,
+  onRegionChange,
+  onTrackSelected,
+  tracks,
+  initialCamera,
+  scrollEnabled,
+}) => {
   const [mapWidth, setMapWidth] = useState('99%');
   const [selectedTrack, setSelectedTrack] = useState(null);
 
@@ -28,9 +35,12 @@ const TrackViewer = ({ curPosCamera, onRegionChange, onTrackSelected, tracks, in
 
   const mapViewProps = {
     rotateEnabled: false,
-    style: [styles.mapStyle, {
-      width: mapWidth,
-    }],
+    style: [
+      styles.mapStyle,
+      {
+        width: mapWidth,
+      },
+    ],
     showsUserLocation: true,
     onMapReady: () => {
       updateMapStyle();
@@ -45,16 +55,11 @@ const TrackViewer = ({ curPosCamera, onRegionChange, onTrackSelected, tracks, in
       onRegionChange(lastRegion);
     },
     initialCamera: initialCamera ? syntheticInitialCamera : curPosCamera,
-    scrollEnabled: (scrollEnabled === undefined) ? true : scrollEnabled,
+    scrollEnabled: scrollEnabled === undefined ? true : scrollEnabled,
   };
 
   const onMarkerPress = (track) => {
-    const {
-      trackTitle,
-      origin,
-      destination,
-      trackLength,
-    } = track;
+    const { trackTitle, origin, destination, trackLength } = track;
     setSelectedTrack(track);
     onTrackSelected({
       trackTitle,
@@ -67,13 +72,46 @@ const TrackViewer = ({ curPosCamera, onRegionChange, onTrackSelected, tracks, in
   if (!curPosCamera) return <></>; // spinner should be here;
 
   const renderCalloutProps = (calloutProps) => {
-    const decideMarginBottom = (index) => (index < calloutProps.length - 1 ? 10 : 0);
-    return calloutProps.map(([key, value, keyBackgroundColor, keyColor, valueBackgroundColor, valueColor], i) => (
-      <View style={[styles.callloutPropRow, { marginBottom: decideMarginBottom(i) }]}>
-        <Text style={[styles.callloutPropKey(keyBackgroundColor, keyColor), { fontSize: 12 }]}>{key}</Text>
-        <Text style={[styles.calloutPropValue(valueBackgroundColor, valueColor), { fontSize: 12 }]}>{value}</Text>
-      </View>
-    ));
+    const decideMarginBottom = (index) =>
+      index < calloutProps.length - 1 ? 10 : 0;
+    return calloutProps.map(
+      (
+        [
+          key,
+          value,
+          keyBackgroundColor,
+          keyColor,
+          valueBackgroundColor,
+          valueColor,
+        ],
+        i
+      ) => (
+        <View
+          style={[
+            styles.callloutPropRow,
+            { marginBottom: decideMarginBottom(i) },
+          ]}
+          key={String(i)}
+        >
+          <Text
+            style={[
+              styles.callloutPropKey(keyBackgroundColor, keyColor),
+              { fontSize: 12 },
+            ]}
+          >
+            {key}
+          </Text>
+          <Text
+            style={[
+              styles.calloutPropValue(valueBackgroundColor, valueColor),
+              { fontSize: 12 },
+            ]}
+          >
+            {value}
+          </Text>
+        </View>
+      )
+    );
   };
 
   const colors = {
@@ -87,17 +125,30 @@ const TrackViewer = ({ curPosCamera, onRegionChange, onTrackSelected, tracks, in
   };
 
   const callOut = (track) => {
-    const {
-      trackTitle,
-      trackLength,
-      origin,
-      destination,
-    } = track;
+    const { trackTitle, trackLength, origin, destination } = track;
 
     const calloutProps = [
-      ['길이', `${trackLength}m`, colors.trackLength, 'white', paleColor(colors.trackLength)],
-      ['시간(남)', utils.predictDuration(trackLength, 'm'), colors.maleSpan, 'white', paleColor(colors.maleSpan)],
-      ['시간(여)', utils.predictDuration(trackLength, 'm'), colors.femaleSpan, 'white', paleColor(colors.femaleSpan)],
+      [
+        '길이',
+        `${trackLength}m`,
+        colors.trackLength,
+        'white',
+        paleColor(colors.trackLength),
+      ],
+      [
+        '시간(남)',
+        utils.predictDuration(trackLength, 'm'),
+        colors.maleSpan,
+        'white',
+        paleColor(colors.maleSpan),
+      ],
+      [
+        '시간(여)',
+        utils.predictDuration(trackLength, 'm'),
+        colors.femaleSpan,
+        'white',
+        paleColor(colors.femaleSpan),
+      ],
     ];
 
     return (

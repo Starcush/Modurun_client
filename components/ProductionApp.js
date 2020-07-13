@@ -17,19 +17,35 @@ console.disableYellowBox = true;
 
 const Stack = createStackNavigator();
 
-const ProductionApp = ({chatRoomTitle}) => {
+const ProductionApp = ({ chatRoomTitle }) => {
   return (
     <Stack.Navigator initialRouteName="SignInScreen">
-      <Stack.Screen options={{ headerShown: false }} name="SignInScreen" component={SignInManager} />
-      <Stack.Screen options={{ headerShown: false }} name="SignUpScreen" component={SignUpManager} />
-      <Stack.Screen options={{ headerShown: false }} name="MainDrawer" component={MainDrawer} />
-      <Stack.Screen options={{ title: '일정 추가' }} name="SchedulerScreen" component={Scheduler} />
-      <Stack.Screen options={{ title: '제작한 트랙 정보' }} name="CreatedTrackInfoScreen" component={CreatedTrackInfo} />
-      <Stack.Screen options={{ title: chatRoomTitle }} name="ChatRoomScreen" component={ChatRoom} />
-      <Stack.Screen options={{ title: '트랙 정보' }} name="SingleTrackViewerScreen" component={SingleTrackViewerInDetail} />
-      <Stack.Screen options={{ title: '등록한 일정 정보' }} name="CreatedScheduleInfoScreen" component={CreatedScheduleInfo} />
-      <Stack.Screen options={{ title: '내 코스' }} name="MyTrackListScreen" component={MyTrackList} />
-      <Stack.Screen options={{ title: '내 정보 수정' }} name="MyInfoManager" component={MyInfoManager} />
+      {/* <Stack.Screen options={{ headerShown: false }} name="SignInScreen" component={SignInManager} />
+      <Stack.Screen options={{ headerShown: false }} name="SignUpScreen" component={SignUpManager} /> */}
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="MainDrawer"
+        component={MainDrawer}
+      />
+      {/* <Stack.Screen options={{ title: '일정 추가' }} name="SchedulerScreen" component={Scheduler} /> */}
+      <Stack.Screen
+        options={{ title: '제작한 트랙 정보' }}
+        name="CreatedTrackInfoScreen"
+        component={CreatedTrackInfo}
+      />
+      {/* <Stack.Screen options={{ title: chatRoomTitle }} name="ChatRoomScreen" component={ChatRoom} /> */}
+      <Stack.Screen
+        options={{ title: '트랙 정보' }}
+        name="SingleTrackViewerScreen"
+        component={SingleTrackViewerInDetail}
+      />
+      {/* <Stack.Screen options={{ title: '등록한 일정 정보' }} name="CreatedScheduleInfoScreen" component={CreatedScheduleInfo} /> */}
+      <Stack.Screen
+        options={{ title: '내 코스' }}
+        name="MyTrackListScreen"
+        component={MyTrackList}
+      />
+      {/* <Stack.Screen options={{ title: '내 정보 수정' }} name="MyInfoManager" component={MyInfoManager} /> */}
     </Stack.Navigator>
   );
 };

@@ -13,7 +13,14 @@ import modurunAPI from '../API';
 import styles from './styles';
 import store from '../../../redux/store';
 
-const TrackListEntry = ({ data, showBookmark, showAdd, dispatch, showDelete, getMyTracks }) => {
+const TrackListEntry = ({
+  data,
+  showBookmark,
+  showAdd,
+  dispatch,
+  showDelete,
+  getMyTracks,
+}) => {
   const {
     trackLength,
     trackTitle,
@@ -32,9 +39,9 @@ const TrackListEntry = ({ data, showBookmark, showAdd, dispatch, showDelete, get
   const [originInfo, setOriginInfo] = useState('');
   const [destinationInfo, setDestinationInfo] = useState('');
   useEffect(() => {
-    googlePlaceApi.getNearestAddr(origin)
-      .then((addr) => setOriginInfo(addr));
-    googlePlaceApi.getNearestAddr(destination)
+    googlePlaceApi.getNearestAddr(origin).then((addr) => setOriginInfo(addr));
+    googlePlaceApi
+      .getNearestAddr(destination)
       .then((addr) => setDestinationInfo(addr));
   }, [data]);
 
@@ -62,15 +69,14 @@ const TrackListEntry = ({ data, showBookmark, showAdd, dispatch, showDelete, get
         onPress: () => {
           if (requesting.deleteTrack) return;
           setRequestState({ ...requesting, deleteTrack: true });
-          modurunAPI.tracks.deleteFromMyTrack(trackId)
-            .then((res) => {
-              if (res.status === 200) {
-                dispatch(trackManagerActions.deleteMyTrack(trackId));
-                setRequestState({ ...requesting, deleteTrack: false });
-                Alert.alert('삭제 완료', '선택한 트랙이 삭제되었습니다');
-                getMyTracks();
-              }
-            });
+          modurunAPI.tracks.deleteFromMyTrack(trackId).then((res) => {
+            if (res.status === 200) {
+              dispatch(trackManagerActions.deleteMyTrack(trackId));
+              setRequestState({ ...requesting, deleteTrack: false });
+              Alert.alert('삭제 완료', '선택한 트랙이 삭제되었습니다');
+              getMyTracks();
+            }
+          });
         },
       },
       {
@@ -80,48 +86,48 @@ const TrackListEntry = ({ data, showBookmark, showAdd, dispatch, showDelete, get
   };
 
   const askIfAdd = () => {
-    Alert.alert(
-      '코스 추가',
-      '내 코스에 추가하시겠습니까?', [
-        {
-          text: '예',
-          onPress: () => {
-            if (requesting.addTrack) return;
-            setRequestState({ ...requesting, addTrack: true });
-            modurunAPI.tracks.addToMyTrack(id)
-              .then((res) => {
-                if (res.status === 409) {
-                  Alert.alert('중복된 코스', '이미 추가한 코스입니다.');
-                }
-                if (res.status === 200) {
-                  Alert.alert('추가 완료', '성공적으로 추가되었습니다');
-                  setRequestState({ ...requesting, addTrack: false });
-                  modurunAPI.tracks.getMyTracks()
-                    .then((myTrackRes) => myTrackRes.json())
-                    .then((json) => {
-                      // console.log('이게 여기가 맞나', json);
-                      dispatch(trackManagerActions.setMyTrack(json))
-                    });
-                }
-              });
-          },
+    Alert.alert('코스 추가', '내 코스에 추가하시겠습니까?', [
+      {
+        text: '예',
+        onPress: () => {
+          if (requesting.addTrack) return;
+          setRequestState({ ...requesting, addTrack: true });
+          modurunAPI.tracks.addToMyTrack(id).then((res) => {
+            if (res.status === 409) {
+              Alert.alert('중복된 코스', '이미 추가한 코스입니다.');
+            }
+            if (res.status === 200) {
+              Alert.alert('추가 완료', '성공적으로 추가되었습니다');
+              setRequestState({ ...requesting, addTrack: false });
+              modurunAPI.tracks
+                .getMyTracks()
+                .then((myTrackRes) => myTrackRes.json())
+                .then((json) => {
+                  // console.log('이게 여기가 맞나', json);
+                  dispatch(trackManagerActions.setMyTrack(json));
+                });
+            }
+          });
         },
-        {
-          text: '아니오',
-        },
-      ],
-    );
+      },
+      {
+        text: '아니오',
+      },
+    ]);
   };
 
   const toggleBookmark = () => {
     if (requesting.bookmark) return;
     setRequestState({ ...requesting, bookmark: true });
-    modurunAPI.tracks.toggleBookmark(trackId)
-      .then((res) => (res.ok ? dispatch(trackManagerActions.toggleBookmark(trackId)) : ''))
+    modurunAPI.tracks
+      .toggleBookmark(trackId)
+      .then((res) =>
+        res.ok ? dispatch(trackManagerActions.toggleBookmark(trackId)) : ''
+      )
       .then(() => {
         setRequestState({
           ...requesting,
-          bookmark: false
+          bookmark: false,
         });
         getMyTracks();
       });
@@ -130,8 +136,23 @@ const TrackListEntry = ({ data, showBookmark, showAdd, dispatch, showDelete, get
   const renderAdd = () => {
     if (!showAdd) return <></>;
     return (
-      <TouchableOpacity onPress={askIfAdd} style={{ alignContent: 'center', padding: 5 }}>
-        <Icon name="plus" color="grey" style={{backgroundColor: 'rgba(255,255,255,0.5)', width: 30, height: 30, borderRadius: 100, textAlign: 'center', textAlignVertical: 'center' }} size={20} />
+      <TouchableOpacity
+        onPress={askIfAdd}
+        style={{ alignContent: 'center', padding: 5 }}
+      >
+        <Icon
+          name="plus"
+          color="black"
+          style={{
+            backgroundColor: 'rgba(255,255,255,0.5)',
+            width: 30,
+            height: 30,
+            borderRadius: 100,
+            textAlign: 'center',
+            textAlignVertical: 'center',
+          }}
+          size={20}
+        />
       </TouchableOpacity>
     );
   };
@@ -139,7 +160,10 @@ const TrackListEntry = ({ data, showBookmark, showAdd, dispatch, showDelete, get
   const renderBookMark = () => {
     if (!showBookmark) return <></>;
     return (
-      <TouchableOpacity onPress={toggleBookmark} style={{ alignContent: 'center', padding: 5 }}>
+      <TouchableOpacity
+        onPress={toggleBookmark}
+        style={{ alignContent: 'center', padding: 5 }}
+      >
         <Icon name="star" size={20} color={bookmark ? 'orange' : 'lightgrey'} />
       </TouchableOpacity>
     );
@@ -163,11 +187,15 @@ const TrackListEntry = ({ data, showBookmark, showAdd, dispatch, showDelete, get
 
   const compactProp = (name, value, color, fontColor) => (
     <View style={[compactPropStyle, { backgroundColor: color }]}>
-      <Text style={{ fontSize: 16, margin: 5, marginRight: 10, color: fontColor }}>{name}</Text>
+      <Text
+        style={{ fontSize: 16, margin: 5, marginRight: 10, color: fontColor }}
+      >
+        {name}
+      </Text>
       <Text style={{ fontSize: 14, flex: 1 }}>{value}</Text>
     </View>
   );
-  
+
   const renderCompactDetail = () => {
     if (showMoreVisible) return <></>;
     return (
@@ -182,18 +210,43 @@ const TrackListEntry = ({ data, showBookmark, showAdd, dispatch, showDelete, get
     if (!showMoreVisible) return <></>;
     return (
       <View style={styles.descContainer}>
-        <View style={{padding: 15}}>
+        <View style={{ padding: 15 }}>
           <PrettyProp name="출발지점" value={originInfo} />
           <PrettyProp name="도착지점" value={destinationInfo} />
           <PrettyProp name="길이" value={utils.prettyLength(trackLength)} />
-          <PrettyProp name="시간(남)" value={utils.predictDuration(trackLength, 'm')} />
-          <PrettyProp name="시간(여)" value={utils.predictDuration(trackLength, 'f')} />
+          <PrettyProp
+            name="시간(남)"
+            value={utils.predictDuration(trackLength, 'm')}
+          />
+          <PrettyProp
+            name="시간(여)"
+            value={utils.predictDuration(trackLength, 'f')}
+          />
         </View>
-        <View style={{ height: 0, backgroundColor: 'rgba(0,0,0,0.1)', marginVertical: 10 }} />
+        <View
+          style={{
+            height: 0,
+            backgroundColor: 'rgba(0,0,0,0.1)',
+            marginVertical: 10,
+          }}
+        />
         <View style={{ alignItems: 'center' }}>
-          <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-around' }}>
-            <TouchableOpacity onPress={viewTrackOnMap} style={styles.showDetail}>
-              <Text style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}>자세히 보기</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              width: '100%',
+              justifyContent: 'space-around',
+            }}
+          >
+            <TouchableOpacity
+              onPress={viewTrackOnMap}
+              style={styles.showDetail}
+            >
+              <Text
+                style={{ color: 'white', fontSize: 16, fontWeight: 'bold' }}
+              >
+                자세히 보기
+              </Text>
             </TouchableOpacity>
             {renderDelete()}
           </View>
@@ -211,12 +264,18 @@ const TrackListEntry = ({ data, showBookmark, showAdd, dispatch, showDelete, get
     <View style={styles.entryContainer}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>{trackTitle}</Text>
-        <Text style={styles.lengtgTitle}>{utils.prettyLength(trackLength)}</Text>
+        <Text style={styles.lengtgTitle}>
+          {utils.prettyLength(trackLength)}
+        </Text>
         <View style={styles.titleButtonContainer}>
           {renderAdd()}
           {renderBookMark()}
           <TouchableOpacity onPress={toggleShowMore} style={styles.chevron}>
-            <Icon name={showMoreVisible ? 'chevron-up' : 'chevron-down'} color="grey" size={20} />
+            <Icon
+              name={showMoreVisible ? 'chevron-up' : 'chevron-down'}
+              color="grey"
+              size={20}
+            />
           </TouchableOpacity>
         </View>
       </View>

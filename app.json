@@ -27,7 +27,12 @@
     },
     "android": {
       "package": "com.runners.moduerun",
-      "versionCode": 1
+      "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDiwHaKjWBEnIh3B6mIGNN-5wBAQXWGZhg"
+        }
+      }
     }
   }
 }

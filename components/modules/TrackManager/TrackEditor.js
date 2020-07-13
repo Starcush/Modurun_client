@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Keyboard, SafeAreaView } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Keyboard,
+  SafeAreaView,
+} from 'react-native';
 import { ScrollView, TouchableHighlight } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
@@ -11,7 +18,7 @@ import QueryCandidate from './QueryCandidate';
 import modurunAPI from '../API';
 import { color } from 'react-native-reanimated';
 
-const TrackEditor = ({updateCreatedTrack, setSwipeEnabled, getMyTracks}) => {
+const TrackEditor = ({ updateCreatedTrack, setSwipeEnabled, getMyTracks }) => {
   const navigation = useNavigation();
   const [typing, setTypingStatus] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,12 +37,13 @@ const TrackEditor = ({updateCreatedTrack, setSwipeEnabled, getMyTracks}) => {
   const updateSearchQuery = (e) => {
     const newText = e.nativeEvent.text;
     setSearchQuery(newText);
-    googlePlaceApi.autoComplete({
-      input: newText,
-      language: 'ko',
-      offset: 3,
-      components: 'country:kr',
-    })
+    googlePlaceApi
+      .autoComplete({
+        input: newText,
+        language: 'ko',
+        offset: 3,
+        components: 'country:kr',
+      })
       .then((res) => res.json())
       .then((json) => {
         if (json.status !== 'OK') return setQueryCandidates([]);
@@ -58,17 +66,16 @@ const TrackEditor = ({updateCreatedTrack, setSwipeEnabled, getMyTracks}) => {
         initialCamera={mapLocation || undefined}
         initialTitle={title}
         onCompleteEdit={(track) => {
-          modurunAPI.tracks.createTrack(track)
-            .then((res) => {
-              updateCreatedTrack(track);
-              if (res.ok) {
-                navigation.navigate('CreatedTrackInfoScreen');
-                getMyTracks();
-              }
-              setSubmittedTitle(false);
-              setTitle('');
-              setSwipeEnabled(true);
-            });
+          modurunAPI.tracks.createTrack(track).then((res) => {
+            updateCreatedTrack(track);
+            if (res.ok) {
+              navigation.navigate('CreatedTrackInfoScreen');
+              getMyTracks();
+            }
+            setSubmittedTitle(false);
+            setTitle('');
+            setSwipeEnabled(true);
+          });
         }}
       />
     );
@@ -77,7 +84,13 @@ const TrackEditor = ({updateCreatedTrack, setSwipeEnabled, getMyTracks}) => {
     if (!typing) return <></>;
     return (
       <ScrollView style={{ backgroundColor: 'white' }}>
-        {queryCandidates.map((candidate) => <QueryCandidate data={candidate} onPress={(location) => setMapLocation(location)} />)}
+        {queryCandidates.map((candidate, idx) => (
+          <QueryCandidate
+            key={String(idx)}
+            data={candidate}
+            onPress={(location) => setMapLocation(location)}
+          />
+        ))}
         <View style={{ height: 100 }} />
       </ScrollView>
     );
@@ -120,7 +133,9 @@ const TrackEditor = ({updateCreatedTrack, setSwipeEnabled, getMyTracks}) => {
   );
 
   const titleInputDesStyle = {
-    fontWeight: 'bold', textAlign: 'center', textAlignVertical: 'center',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    textAlignVertical: 'center',
   };
 
   const submitTitle = () => {
@@ -132,8 +147,17 @@ const TrackEditor = ({updateCreatedTrack, setSwipeEnabled, getMyTracks}) => {
   const renderTitleInputScreen = () => (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <View style={{ justifyContent: 'center', flex: 80 }}>
-        <Text style={[titleInputDesStyle, { fontSize: 18, marginBottom: 6, color: 'rgb(200,200,200)' }]}>코스를 제작해보고 싶으신가요?</Text>
-        <Text style={[titleInputDesStyle, { fontSize: 20, marginBottom: 10 }]}>코스 이름을 정해주세요</Text>
+        <Text
+          style={[
+            titleInputDesStyle,
+            { fontSize: 18, marginBottom: 6, color: 'rgb(200,200,200)' },
+          ]}
+        >
+          코스를 제작해보고 싶으신가요?
+        </Text>
+        <Text style={[titleInputDesStyle, { fontSize: 20, marginBottom: 10 }]}>
+          코스 이름을 정해주세요
+        </Text>
         <TextInput
           style={{
             borderWidth: 1,
@@ -150,8 +174,19 @@ const TrackEditor = ({updateCreatedTrack, setSwipeEnabled, getMyTracks}) => {
         />
       </View>
       <View style={{ flex: 20 }}>
-        <TouchableOpacity onPress={submitTitle} style={{padding: 10, backgroundColor: 'dodgerblue', borderRadius: 10, marginHorizontal: 30, paddingVertical: 20 }}>
-          <Text style={{ color: 'white', textAlign: 'center', fontSize: 20 }}>제작하기</Text>
+        <TouchableOpacity
+          onPress={submitTitle}
+          style={{
+            padding: 10,
+            backgroundColor: 'dodgerblue',
+            borderRadius: 10,
+            marginHorizontal: 30,
+            paddingVertical: 20,
+          }}
+        >
+          <Text style={{ color: 'white', textAlign: 'center', fontSize: 20 }}>
+            제작하기
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -163,15 +198,14 @@ const TrackEditor = ({updateCreatedTrack, setSwipeEnabled, getMyTracks}) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      {renderAfterSettingTitle()}
-    </SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>{renderAfterSettingTitle()}</SafeAreaView>
   );
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateCreatedTrack: (track) => dispatch(createdTrackInfoActions.setCreatedTrack(track)),
+    updateCreatedTrack: (track) =>
+      dispatch(createdTrackInfoActions.setCreatedTrack(track)),
   };
 };
 
