@@ -1,8 +1,8 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 import { connect } from 'react-redux';
-import React, { useState, useRef, useEffect } from 'react';
-import * as Location from 'expo-location';
-import MapView, { Polyline, Marker, Callout } from 'react-native-maps';
+import React, { useState, useRef } from 'react';
+import MapView, { Callout, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Text, View } from 'react-native';
 import styles from './style';
 import Track from './Track';
@@ -35,10 +35,6 @@ const TrackViewer = ({ curPosCamera, onRegionChange, onTrackSelected, tracks, in
     onMapReady: () => {
       updateMapStyle();
     },
-    onRegionChange: (region) => {
-      // onRegionChange(region)
-      // onTouchEnd로 콜백 위치가 바뀜.
-    },
     onTouchEnd: () => {
       // eslint-disable-next-line no-underscore-dangle
       const lastRegion = mapView.current.__lastRegion;
@@ -64,7 +60,7 @@ const TrackViewer = ({ curPosCamera, onRegionChange, onTrackSelected, tracks, in
     });
   };
 
-  if (!curPosCamera) return <></>; // spinner should be here;
+  if (!curPosCamera) return <></>;
 
   const renderCalloutProps = (calloutProps) => {
     const decideMarginBottom = (index) => (index < calloutProps.length - 1 ? 10 : 0);
@@ -90,8 +86,6 @@ const TrackViewer = ({ curPosCamera, onRegionChange, onTrackSelected, tracks, in
     const {
       trackTitle,
       trackLength,
-      origin,
-      destination,
     } = track;
 
     const calloutProps = [
@@ -114,7 +108,7 @@ const TrackViewer = ({ curPosCamera, onRegionChange, onTrackSelected, tracks, in
   };
 
   return (
-    <MapView ref={mapView} {...mapViewProps}>
+    <MapView ref={mapView} {...mapViewProps} provider={PROVIDER_GOOGLE}>
       {tracks.map((track) => (
         <Track
           key={track.trackTitle}

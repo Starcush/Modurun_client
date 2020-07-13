@@ -11,7 +11,6 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
-      // "image": "./assets/splash.png",
       "image": "./assets/splash.png",
       "resizeMode": "cover",
       "backgroundColor": "#ffffff"
@@ -27,7 +26,11 @@
     },
     "android": {
       "package": "com.runners.moduerun",
-      "versionCode": 1
+      "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDiwHaKjWBEnIh3B6mIGNN-5wBAQXWGZhg"
+        }
+      }  
     }
-  }
 }

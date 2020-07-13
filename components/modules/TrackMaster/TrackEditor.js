@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState, useEffect, useRef } from 'react';
 import {
   View, Text, KeyboardAvoidingView, Keyboard, BackHandler, Alert,
 } from 'react-native';
-import MapView, { Polyline } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import { TouchableOpacity, TextInput } from 'react-native-gesture-handler';
@@ -27,7 +28,6 @@ const TrackEditor = ({ curPosCamera, onCompleteEdit, initialLocation, initialTit
   const mapView = useRef();
   const [mapWidth, setMapWidth] = useState(99);
   const [titleInputStyle, setTitleInputStyle] = useState({});
-  // const [errorMsg, setErrorMsg] = useState(null);
   const [markable, setMarkable] = useState(false);
   const [markers, setMarkers] = useState([]);
   const [markerId, setMarkerId] = useState(0);
@@ -49,7 +49,6 @@ const TrackEditor = ({ curPosCamera, onCompleteEdit, initialLocation, initialTit
 
   const [exit, setExit] = useState(false);
 
-  // Output data
   const [trackTitle, setTrackTitle] = useState(initialTitle || '');
   const [track, setTrack] = useState(undefined);
 
@@ -75,13 +74,6 @@ const TrackEditor = ({ curPosCamera, onCompleteEdit, initialLocation, initialTit
   const syntheticCamera = utils.makeCamera(initialLocation);
 
   async function goToCurrentLocation() {
-    const {
-      status,
-      // permissions,
-    } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      // setErrorMsg('Permission to access location was denied');
-    }
     const position = await Location.getCurrentPositionAsync({});
     if (exit) throw Error('Editor has been closed');
     const { coords } = position;
@@ -119,7 +111,6 @@ const TrackEditor = ({ curPosCamera, onCompleteEdit, initialLocation, initialTit
     };
   }, []);
 
-  // Init mapView(For activating follow user button)
   const updateMapStyle = () => {
     setMapWidth('100%');
   };
@@ -358,7 +349,7 @@ const TrackEditor = ({ curPosCamera, onCompleteEdit, initialLocation, initialTit
   const renderMapView = () => {
     if (typingText) return <></>;
     return (
-      <MapView ref={mapView} {...mapViewProps}>
+      <MapView ref={mapView} {...mapViewProps} provider={PROVIDER_GOOGLE}>
         {renderMarkers()}
         <Route coordinates={routes} />
       </MapView>

@@ -1,18 +1,15 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
 import { connect } from 'react-redux';
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
 import { View } from 'react-native';
 import styles from './style';
-import utils from './utils';
 import TrackEditor from './TrackEditor';
 import TrackViewer from './TrackViewer';
 import * as actions from '../../../redux/action/TrackMaster/creators';
 import ScheduledTrackViewer from './ScheduledTrackViewer';
-import propShapes from './propShapes';
-import exampleProps from './exampleProps';
 
 const TrackMaster = ({
   setUserLocation,
@@ -28,19 +25,8 @@ const TrackMaster = ({
   onRefReady,
   camera,
 }) => {
-  // const [editable, setEditable] = useState(false);
-  // const [followUser, setFollowUser] = useState(false);
-  // const toggleFollowUser = () => setFollowUser(!followUser);
-  // const toggleEditMode = () => setEditable(!editable);
 
   const requestGeoLocationPermission = async () => {
-    const {
-      status,
-      // permissions,
-    } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      // setErrorMsg('Permission to access location was denied');
-    }
     const curPosition = await Location.getCurrentPositionAsync({});
     const { coords } = curPosition;
     const curPosCamera = undefined || {
@@ -104,13 +90,9 @@ const TrackMaster = ({
   );
 };
 
-const exampleTrack = exampleProps.track;
-const exmapleSchedule = exampleProps.schedule;
-
 TrackMaster.defaultProps = {
   mode: 'scheduleViewer',
   onCompleteEdit: (track) => track,
-  onScheduleSelected: (schedule) => schedule,
   onTrackSelected: (track) => track,
   onRegionChange: (region) => region,
 };
@@ -118,10 +100,8 @@ TrackMaster.defaultProps = {
 
 TrackMaster.propTypes = {
   setUserLocation: PropTypes.func.isRequired,
-  /** mode: "trackViewer", "scheduleViewer", "trackEditor" */
   mode: PropTypes.oneOf(['trackViewer', 'scheduleViewer', 'trackEditor']),
   onCompleteEdit: PropTypes.func,
-  onScheduleSelected: PropTypes.func,
   onTrackSelected: PropTypes.func,
   onRegionChange: PropTypes.func,
 };

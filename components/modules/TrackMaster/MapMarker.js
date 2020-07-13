@@ -18,8 +18,6 @@ export default function MapMarker({ position, tag, onDragEnd, onPress, draggable
     style: {
       zIndex: 100,
     },
-    // title,
-    // description,
   });
 
 

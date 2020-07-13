@@ -1,15 +1,11 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
-import { Polyline } from 'react-native-maps';
-import PropTypes from 'prop-types';
+import React from 'react';
 import MapMarker from './MapMarker';
-import propShapes from './propShapes';
-import exampleProps from './exampleProps';
 import Route from './Route';
 
 const Track = ({ data, track, visible, onMarkerPress, callOut }) => {
-  const {trackTitle, route, origin, destination, trackLength} = track;
+  const { trackTitle, route, origin } = track;
 
   const renderRoute = () => {
     if (!visible) return <></>;
