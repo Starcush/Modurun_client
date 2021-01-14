@@ -12,8 +12,6 @@
 
 ## 설치 및 실행
 
----
-
 ### 설치
 
 ```js
@@ -31,8 +29,6 @@ $ npm start
 
 ## 스택
 
----
-
 <br>
 
 - **Client** : Expo, React-Native, Javascript(ES6), React Navigation, Redux, Axios<br><br>
@@ -40,8 +36,6 @@ $ npm start
   <br><br>
 
 ## 서비스 시연
-
----
 
 <br>
 
